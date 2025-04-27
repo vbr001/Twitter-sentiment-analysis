@@ -1,0 +1,22 @@
+to run streaming mode:
+/opt/kafka/bin/zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
+
+/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
+
+/opt/kafka/bin/kafka-topics.sh --create   --topic twitter-topic1   --bootstrap-server localhost:9092   --partitions 1   --replication-factor 1
+/opt/kafka/bin/kafka-topics.sh --create --topic twitter-topic2 --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+/opt/kafka/bin/kafka-topics.sh --create --topic twitter-topic3 --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+python3 twitter_producer.py
+python3 twitter_streamer.py
+
+/opt/spark/bin/spark-submit   --jars /home/osboxes/mysql-connector-j-8.3.0/mysql-connector-j-8.3.0.jar   --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0   /home/osboxes/DBT_PROJECT_cmplt/spark_streaming_sentiment.py
+
+  
+python3 evaluate_streaming.py
+
+/opt/spark/bin/spark-submit   --jars /home/osboxes/mysql-connector-j-8.3.0/mysql-connector-j-8.3.0.jar   /home/osboxes/DBT_PROJECT_cmplt/twitter_batch.py
+
+
+python3 compare_results.py
+
